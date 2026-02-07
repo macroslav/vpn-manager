@@ -23,6 +23,7 @@ WG_NETWORK = os.getenv("WG_NETWORK", "10.0.0.0/24")
 WG_INTERFACE = os.getenv("WG_INTERFACE", "wg0")
 
 WG_RESTART = os.getenv("WG_RESTART", "1") == "1"
+WG_LIVE_APPLY = os.getenv("WG_LIVE_APPLY", "0") == "1"
 WG_FAKE_KEYS = os.getenv("WG_FAKE_KEYS", "0") == "1"
 WG_SAVE_KEYS = os.getenv("WG_SAVE_KEYS", "0") == "1"
 IMPORT_ON_START = os.getenv("IMPORT_ON_START", "1") == "1"

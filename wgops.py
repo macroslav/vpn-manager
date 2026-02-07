@@ -13,6 +13,7 @@ from config import (
     WG_FAKE_KEYS,
     WG_INTERFACE,
     WG_KEYS_DIR,
+    WG_LIVE_APPLY,
     WG_RESTART,
     WG_SAVE_KEYS,
 )
@@ -95,3 +96,17 @@ def restart_wireguard() -> None:
     if not WG_RESTART:
         return
     run_cmd(["systemctl", "restart", f"wg-quick@{WG_INTERFACE}"])
+
+
+def apply_live_add_peer(public_key: str, ip: str) -> None:
+    if not WG_LIVE_APPLY or WG_FAKE_KEYS:
+        return
+    run_cmd(
+        ["wg", "set", WG_INTERFACE, "peer", public_key, "allowed-ips", f"{ip}/32"]
+    )
+
+
+def apply_live_remove_peer(public_key: str) -> None:
+    if not WG_LIVE_APPLY or WG_FAKE_KEYS:
+        return
+    run_cmd(["wg", "set", WG_INTERFACE, "peer", public_key, "remove"])

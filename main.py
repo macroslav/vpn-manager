@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from config import APP_TITLE, IMPORT_ON_START, WG_NETWORK
+from config import APP_TITLE, IMPORT_ON_START, WG_NETWORK, WG_LIVE_APPLY
 from db import (
     ensure_dirs,
     find_peer_by_id,
@@ -25,6 +25,8 @@ from wgconf import (
     remove_peer_from_conf,
 )
 from wgops import (
+    apply_live_add_peer,
+    apply_live_remove_peer,
     build_client_config,
     generate_keypair,
     maybe_save_keys,
@@ -79,7 +81,9 @@ def create_peer(name: str) -> int:
     maybe_save_keys(safe_name, private_key, public_key)
 
     append_peer_to_conf(name, public_key, ip)
-    restart_wireguard()
+    apply_live_add_peer(public_key, ip)
+    if not WG_LIVE_APPLY:
+        restart_wireguard()
 
     return insert_peer(
         name=name,
@@ -97,7 +101,9 @@ def delete_peer(peer_id: int) -> None:
         raise ValueError("Peer not found")
 
     remove_peer_from_conf(row["ip"])
-    restart_wireguard()
+    apply_live_remove_peer(row["public_key"])
+    if not WG_LIVE_APPLY:
+        restart_wireguard()
 
     for path in [row["config_path"], row["qr_path"]]:
         if not path:

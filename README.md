@@ -46,6 +46,7 @@ WG_DNS=8.8.8.8
 WG_NETWORK=10.0.0.0/24
 WG_INTERFACE=wg0
 WG_RESTART=1
+WG_LIVE_APPLY=0
 WG_FAKE_KEYS=0
 WG_SAVE_KEYS=0
 IMPORT_ON_START=1
@@ -66,6 +67,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 - `WG_NETWORK` — сеть WireGuard, например `10.0.0.0/24`
 - `WG_INTERFACE` — имя интерфейса, по умолчанию `wg0`
 - `WG_RESTART` — `1/0`, перезапускать ли `wg-quick@wg0`
+- `WG_LIVE_APPLY` — `1/0`, применять изменения через `wg set` без рестарта
 - `WG_FAKE_KEYS` — `1/0`, использовать фейковые ключи (для локальных тестов)
 - `WG_SAVE_KEYS` — `1/0`, сохранять ли ключи в `WG_KEYS_DIR`
 - `WG_KEYS_DIR` — директория ключей, по умолчанию `/etc/wireguard/keys`
