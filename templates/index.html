@@ -49,12 +49,12 @@
             <div class="key">{{ peer.public_key }}</div>
             <div class="actions">
               {% if peer.config_path %}
-              <a class="btn ghost" href="/peers/{{ peer.id }}/config">Конфиг</a>
+              <a class="btn ghost" href="/peers/{{ peer.id }}/config" download>Конфиг</a>
               {% else %}
               <span class="pill">Конфиг нет</span>
               {% endif %}
               {% if peer.qr_path %}
-              <a class="btn ghost" href="/peers/{{ peer.id }}/qr">QR</a>
+              <a class="btn ghost" href="/peers/{{ peer.id }}/qr" download>QR</a>
               {% else %}
               <span class="pill">QR нет</span>
               {% endif %}

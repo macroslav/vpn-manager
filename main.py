@@ -155,7 +155,11 @@ def download_config(peer_id: int):
     if not row["config_path"]:
         raise HTTPException(status_code=404, detail="Config not available for this peer")
     path = Path(row["config_path"])
-    return FileResponse(path, filename=f"{safe_filename(row['name'])}.conf")
+    return FileResponse(
+        path,
+        filename=f"{safe_filename(row['name'])}.conf",
+        media_type="application/octet-stream",
+    )
 
 
 @app.get("/peers/{peer_id}/qr")
@@ -166,7 +170,11 @@ def download_qr(peer_id: int):
     if not row["qr_path"]:
         raise HTTPException(status_code=404, detail="QR not available for this peer")
     path = Path(row["qr_path"])
-    return FileResponse(path, filename=f"{safe_filename(row['name'])}.png")
+    return FileResponse(
+        path,
+        filename=f"{safe_filename(row['name'])}.png",
+        media_type="application/octet-stream",
+    )
 
 
 @app.get("/api/peers")
