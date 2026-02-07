@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="header">
+        <div class="brand">
+          <div class="logo">WG</div>
+          <div>
+            <h1>WireGuard Users</h1>
+            <p>Быстрое добавление и удаление пиров</p>
+          </div>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2>Добавить нового пользователя</h2>
+        <form class="form" method="post" action="/peers">
+          <label>
+            Имя
+            <input name="name" placeholder="Например: iPhone-Sergey" required />
+          </label>
+          <button type="submit">Создать</button>
+        </form>
+        <p class="hint">
+          Сервис сам выберет свободный IP, сгенерирует ключи, конфиг и QR.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Список пиров</h2>
+        {% if peers %}
+        <div class="table">
+          <div class="row header-row">
+            <div>Имя</div>
+            <div>IP</div>
+            <div>Ключ</div>
+            <div>Действия</div>
+          </div>
+          {% for peer in peers %}
+          <div class="row">
+            <div class="name">{{ peer.name }}</div>
+            <div class="ip">{{ peer.ip }}</div>
+            <div class="key">{{ peer.public_key }}</div>
+            <div class="actions">
+              {% if peer.config_path %}
+              <a class="btn ghost" href="/peers/{{ peer.id }}/config">Конфиг</a>
+              {% else %}
+              <span class="pill">Конфиг нет</span>
+              {% endif %}
+              {% if peer.qr_path %}
+              <a class="btn ghost" href="/peers/{{ peer.id }}/qr">QR</a>
+              {% else %}
+              <span class="pill">QR нет</span>
+              {% endif %}
+              <form method="post" action="/peers/{{ peer.id }}/delete">
+                <button class="btn danger" type="submit">Удалить</button>
+              </form>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty">Пиров пока нет.</p>
+        {% endif %}
+      </section>
+    </main>
+  </body>
+</html>
